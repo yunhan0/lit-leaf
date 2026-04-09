@@ -1,22 +1,50 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { generateGame } from "./data";
 import type { Round } from "./data";
+import { useProfileStore } from "../../context/profiles";
 
 type Feedback = "correct" | "wrong" | null;
 
 export function MatchGame() {
   const navigate = useNavigate();
+  const { activeProfile, addStars } = useProfileStore();
   const [rounds] = useState<Round[]>(() => generateGame(5));
   const [currentRound, setCurrentRound] = useState(0);
   const [stars, setStars] = useState(0);
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [gameComplete, setGameComplete] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [attempts, setAttempts] = useState(0);
 
   const round = rounds[currentRound];
   const isLastRound = currentRound === rounds.length - 1;
+
+  const saveProgress = useCallback(
+    async (earnedStars: number) => {
+      if (!activeProfile || saved) return;
+      try {
+        const res = await fetch("/api/progress", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            profileId: activeProfile.id,
+            gameCategory: "match",
+            gameId: "find-different",
+            score: earnedStars,
+            stars: earnedStars,
+          }),
+        });
+        if (res.ok) {
+          addStars(activeProfile.id, earnedStars);
+          setSaved(true);
+        }
+      } catch {}
+    },
+    [activeProfile, saved, addStars]
+  );
 
   const handleTap = useCallback(
     (index: number) => {
@@ -27,10 +55,12 @@ export function MatchGame() {
       if (index === round.differentIndex) {
         setFeedback("correct");
         const earnedStars = attempts === 0 ? 3 : attempts === 1 ? 2 : 1;
-        setStars((s) => s + earnedStars);
+        const newTotal = stars + earnedStars;
+        setStars(newTotal);
         setTimeout(() => {
           if (isLastRound) {
             setGameComplete(true);
+            saveProgress(newTotal);
           } else {
             setCurrentRound((r) => r + 1);
             setFeedback(null);
@@ -47,7 +77,7 @@ export function MatchGame() {
         }, 800);
       }
     },
-    [feedback, round, isLastRound, attempts]
+    [feedback, round, isLastRound, attempts, stars, saveProgress]
   );
 
   if (gameComplete) {
@@ -76,7 +106,7 @@ export function MatchGame() {
               Home
             </button>
             <button
-              onClick={() => window.location.reload()}
+              onClick={() => navigate("/games/match")}
               className="flex-1 py-3 rounded-xl bg-emerald-500 text-white font-bold hover:bg-emerald-600 transition-colors"
             >
               Play Again

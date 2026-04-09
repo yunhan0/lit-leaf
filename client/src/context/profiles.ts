@@ -7,6 +7,7 @@ interface ChildProfile {
   avatar: string | null;
   birthdate: string | null;
   ageGroup: string;
+  totalStars: number;
   createdAt: string;
 }
 
@@ -18,6 +19,7 @@ interface ProfileState {
   updateProfile: (profile: ChildProfile) => void;
   removeProfile: (id: string) => void;
   setActiveProfile: (profile: ChildProfile | null) => void;
+  addStars: (profileId: string, stars: number) => void;
 }
 
 export const useProfileStore = create<ProfileState>((set) => ({
@@ -39,4 +41,16 @@ export const useProfileStore = create<ProfileState>((set) => ({
         state.activeProfile?.id === id ? null : state.activeProfile,
     })),
   setActiveProfile: (profile) => set({ activeProfile: profile }),
+  addStars: (profileId, stars) =>
+    set((state) => {
+      const update = (p: ChildProfile) =>
+        p.id === profileId ? { ...p, totalStars: p.totalStars + stars } : p;
+      return {
+        profiles: state.profiles.map(update),
+        activeProfile:
+          state.activeProfile?.id === profileId
+            ? update(state.activeProfile)
+            : state.activeProfile,
+      };
+    }),
 }));

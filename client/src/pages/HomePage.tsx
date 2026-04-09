@@ -20,12 +20,13 @@ export function HomePage() {
             className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-emerald-50 transition-colors"
           >
             {activeProfile ? (
-              <>
-                <span className="text-xl">{activeProfile.avatar || "🦁"}</span>
-                <span className="text-sm text-gray-600">
-                  {activeProfile.name}
-                </span>
-              </>
+            <>
+              <span className="text-xl">{activeProfile.avatar || "🦁"}</span>
+              <span className="text-sm text-gray-600">
+                {activeProfile.name}
+              </span>
+              <span className="text-xs text-amber-500">⭐ {activeProfile.totalStars}</span>
+            </>
             ) : (
               <span className="text-sm text-gray-400">Select profile</span>
             )}
@@ -49,6 +50,11 @@ export function HomePage() {
             <h1 className="text-3xl font-bold text-emerald-700 mb-2">
               Hi, {activeProfile.name}!
             </h1>
+            <div className="flex items-center justify-center gap-1 text-amber-500 mb-2">
+              <span className="text-2xl">⭐</span>
+              <span className="text-2xl font-bold">{activeProfile.totalStars}</span>
+              <span className="text-sm text-gray-400">total stars</span>
+            </div>
             <p className="text-gray-500 mb-8">
               Ready to play and learn?
             </p>

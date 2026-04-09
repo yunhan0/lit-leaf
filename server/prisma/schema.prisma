@@ -23,8 +23,9 @@ model ChildProfile {
   name      String
   avatar    String?
   birthdate DateTime?
-  ageGroup  String   @default("2-3")
-  createdAt DateTime @default(now())
+  ageGroup   String   @default("2-3")
+  totalStars Int      @default(0)
+  createdAt  DateTime @default(now())
 
   user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   progress GameProgress[]

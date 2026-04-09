@@ -76,4 +76,33 @@ router.delete("/profiles/:id", async (req, res) => {
   res.json({ ok: true });
 });
 
+router.post("/progress", async (req, res) => {
+  const userId = (req as any).session.passport.user;
+  const { profileId, gameCategory, gameId, score, stars } = req.body;
+
+  const profile = await prisma.childProfile.findFirst({
+    where: { id: profileId, userId },
+  });
+  if (!profile) {
+    return res.status(404).json({ error: "Profile not found" });
+  }
+
+  const progress = await prisma.gameProgress.create({
+    data: {
+      profileId,
+      gameCategory: gameCategory || "match",
+      gameId: gameId || "default",
+      score: score || 0,
+      stars: stars || 0,
+    },
+  });
+
+  const updated = await prisma.childProfile.update({
+    where: { id: profileId },
+    data: { totalStars: { increment: stars || 0 } },
+  });
+
+  res.status(201).json({ progress, totalStars: updated.totalStars });
+});
+
 export default router;
