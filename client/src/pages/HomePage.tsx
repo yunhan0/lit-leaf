@@ -53,12 +53,15 @@ export function HomePage() {
               Ready to play and learn?
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <button className="p-6 rounded-2xl bg-white shadow-md hover:shadow-lg transition-shadow flex flex-col items-center gap-3">
+              <button
+                onClick={() => navigate("/games/match")}
+                className="p-6 rounded-2xl bg-white shadow-md hover:shadow-lg transition-shadow flex flex-col items-center gap-3"
+              >
                 <span className="text-4xl">🔍</span>
                 <span className="font-semibold text-emerald-700">
                   Find & Match
                 </span>
-                <span className="text-xs text-gray-400">Coming soon</span>
+                <span className="text-xs text-emerald-500">Play now!</span>
               </button>
               <button className="p-6 rounded-2xl bg-white shadow-md hover:shadow-lg transition-shadow flex flex-col items-center gap-3">
                 <span className="text-4xl">🔤</span>

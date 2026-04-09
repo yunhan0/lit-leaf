@@ -4,6 +4,7 @@ import { useProfiles } from "./hooks/useProfiles";
 import { LoginPage } from "./pages/LoginPage";
 import { HomePage } from "./pages/HomePage";
 import { ProfileSelectPage } from "./pages/ProfileSelectPage";
+import { MatchGame } from "./games/match/MatchGame";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -25,6 +26,7 @@ function AppWithAuth() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/profiles" element={<ProtectedRoute><ProfileSelectPage /></ProtectedRoute>} />
       <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+      <Route path="/games/match" element={<ProtectedRoute><MatchGame /></ProtectedRoute>} />
     </Routes>
   );
 }
