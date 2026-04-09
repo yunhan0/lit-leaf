@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useProfileStore } from "../context/profiles";
 
 const AVATARS = ["🦁", "🐱", "🐰", "🐻", "🦊", "🐸", "🐼", "🦋", "🌸", "⭐"];
@@ -104,6 +105,7 @@ export function ProfileSelectPage() {
   const { profiles, addProfile, removeProfile, setActiveProfile } =
     useProfileStore();
   const [showCreate, setShowCreate] = useState(profiles.length === 0);
+  const navigate = useNavigate();
 
   const handleCreate = async (data: {
     name: string;
@@ -120,6 +122,7 @@ export function ProfileSelectPage() {
       const { profile } = await res.json();
       addProfile(profile);
       setActiveProfile(profile);
+      navigate("/");
     }
   };
 
@@ -160,7 +163,7 @@ export function ProfileSelectPage() {
           {profiles.map((p) => (
             <div key={p.id} className="relative group">
               <button
-                onClick={() => setActiveProfile(p)}
+                onClick={() => { setActiveProfile(p); navigate("/"); }}
                 className="w-full p-6 rounded-2xl bg-emerald-50 hover:bg-emerald-100 transition-colors flex flex-col items-center gap-2"
               >
                 <span className="text-5xl">{p.avatar || "🦁"}</span>
