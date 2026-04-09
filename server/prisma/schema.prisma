@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  avatar    String?
+  createdAt DateTime @default(now())
+
+  profiles ChildProfile[]
+}
+
+model ChildProfile {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  avatar    String?
+  birthdate DateTime?
+  ageGroup  String   @default("2-3")
+  createdAt DateTime @default(now())
+
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  progress GameProgress[]
+
+  @@index([userId])
+}
+
+model GameProgress {
+  id           String   @id @default(cuid())
+  profileId    String
+  gameCategory String
+  gameId       String
+  level        Int      @default(1)
+  score        Int      @default(0)
+  stars        Int      @default(0)
+  completedAt  DateTime @default(now())
+
+  profile ChildProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+}
