@@ -6,6 +6,7 @@ import { HomePage } from "./pages/HomePage";
 import { ProfileSelectPage } from "./pages/ProfileSelectPage";
 import { MatchGame } from "./games/match/MatchGame";
 import { LetterGame } from "./games/letters/LetterGame";
+import { ColoringGame } from "./games/coloring/ColoringGame";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -29,6 +30,7 @@ function AppWithAuth() {
       <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
       <Route path="/games/match" element={<ProtectedRoute><MatchGame /></ProtectedRoute>} />
       <Route path="/games/letters" element={<ProtectedRoute><LetterGame /></ProtectedRoute>} />
+      <Route path="/games/coloring" element={<ProtectedRoute><ColoringGame /></ProtectedRoute>} />
     </Routes>
   );
 }
