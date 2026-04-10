@@ -69,10 +69,13 @@ export function HomePage() {
                 </span>
                 <span className="text-xs text-emerald-500">Play now!</span>
               </button>
-              <button className="p-6 rounded-2xl bg-white shadow-md hover:shadow-lg transition-shadow flex flex-col items-center gap-3">
+              <button
+                onClick={() => navigate("/games/letters")}
+                className="p-6 rounded-2xl bg-white shadow-md hover:shadow-lg transition-shadow flex flex-col items-center gap-3"
+              >
                 <span className="text-4xl">🔤</span>
                 <span className="font-semibold text-emerald-700">Letters</span>
-                <span className="text-xs text-gray-400">Coming soon</span>
+                <span className="text-xs text-emerald-500">Play now!</span>
               </button>
               <button className="p-6 rounded-2xl bg-white shadow-md hover:shadow-lg transition-shadow flex flex-col items-center gap-3">
                 <span className="text-4xl">🎨</span>

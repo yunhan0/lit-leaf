@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAuthStore } from "../context/auth";
 
 export function useAuth() {
-  const { user, loading, setUser, setLoading, logout } = useAuthStore();
+  const { user, loading, setUser, logout } = useAuthStore();
 
   useEffect(() => {
     fetch("/api/me", { credentials: "include" })
